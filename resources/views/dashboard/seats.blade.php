@@ -3,22 +3,19 @@
 @section('content')
     <div class="container mt-4">
         <h1 class="text-center pb-5">Seats for Movie: {{ $schedule->movie->title }}</h1>
-
         <h3 class="text-center">Start Time: {{ \Carbon\Carbon::parse($schedule->start_time)->format('M d, Y h:i A') }}</h3>
 
-        <!-- Screen representation with style -->
         <div class="d-flex justify-content-center mb-4">
             <div class="bg-dark text-white p-3 w-50 text-center rounded" style="font-size: 20px; font-weight: bold;">
                 SCREEN
             </div>
         </div>
 
-        <!-- Seat layout with additional margin and centered design -->
         <div class="row justify-content-center">
             @foreach($seats as $seat)
                 <div class="col-md-2 mb-3">
                     @if($seat->isAvailableForSchedule($schedule->id))
-                        <button class="btn btn-success w-100 seat-button"
+                        <button class="btn btn-success w-100 seat-btn"
                                 data-bs-toggle="modal"
                                 data-bs-target="#seatModal"
                                 data-seat-id="{{ $seat->id }}"
@@ -28,7 +25,7 @@
                             Seat {{ $seat->row }}-{{ $seat->seat }}
                         </button>
                     @else
-                        <button class="btn btn-danger w-100 seat-button" disabled>
+                        <button class="btn btn-danger w-100 seat-btn" disabled>
                             Seat {{ $seat->row }}-{{ $seat->seat }}
                         </button>
                     @endif
@@ -37,7 +34,6 @@
         </div>
     </div>
 
-    <!-- Modal for Booking Confirmation -->
     <div class="modal fade" id="seatModal" tabindex="-1" aria-labelledby="seatModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -60,32 +56,36 @@
 
 @section('scripts')
     <script>
-        // Handle button click to open the modal and show seat details
         $('#seatModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget); // Button that triggered the modal
-            var seatId = button.data('seat-id'); // Extract info from data-* attributes
-            var seatRow = button.data('seat-row');
-            var seatNumber = button.data('seat-number');
+            var btn = $(event.relatedTarget);
+            var seatId = btn.data('seat-id');
+            var seatRow = btn.data('seat-row');
+            var seatNumber = btn.data('seat-number');
             var seatDetails = 'Row: ' + seatRow + ' | Seat: ' + seatNumber;
-
-            var scheduleId = button.data('schedule-id');
-
-            // Update the modal's content with seat details
+            var scheduleId = btn.data('schedule-id');
             var modal = $(this);
+
             modal.find('.modal-body #seatDetails').text(seatDetails);
 
-            // Store data for AJAX request
             modal.data('seat-id', seatId);
             modal.data('schedule-id', scheduleId);
         });
 
-        // Confirm booking action
         $('#confirmBooking').on('click', function () {
             var modal = $('#seatModal');
             var seatId = modal.data('seat-id');
             var scheduleId = modal.data('schedule-id');
+            var btn = $(this);
+            var triggerBtn = $('#seatModal').data('trigger-btn'); // The button that triggered the modal
 
-            // Send an AJAX request to book the seat
+            btn.attr('disabled', true);
+
+            debugger
+            triggerBtn.attr('disabled', true)
+                .removeClass('btn-success')
+                .addClass('btn-secondary')
+                .removeAttr('data-bs-target');
+
             $.ajax({
                 url: '{{ route("book.seat") }}',
                 method: 'POST',
@@ -96,22 +96,29 @@
                 },
                 success: function (response) {
                     if (response.success) {
-                        // Update the seat status on the UI (change button to booked)
-                        $('button[data-seat-id="' + seatId + '"]')
-                            .removeClass('btn-success')
+                        triggerBtn.removeClass('btn-success')
                             .addClass('btn-danger')
                             .attr('disabled', true)
+                            .removeAttr('data-bs-target');
 
-                        // Hide the modal after booking
                         $('#seatModal').modal('hide');
                     } else {
                         alert(response.message);
+                        triggerBtn.attr('disabled', false)
+                            .attr('data-bs-target', '#seatModal');
                     }
                 },
                 error: function () {
                     alert('An error occurred while booking the seat. Please try again.');
-                }
+                    triggerBtn.attr('disabled', false)
+                        .attr('data-bs-target', '#seatModal');
+                },
             });
+        });
+
+        $('#seatModal').on('show.bs.modal', function (event) {
+            var btn = $(event.relatedTarget);
+            $('#seatModal').data('trigger-btn', btn);
         });
     </script>
 @endsection

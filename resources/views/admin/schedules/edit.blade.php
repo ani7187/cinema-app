@@ -5,12 +5,11 @@
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.schedules.index') }}">{{ __('Schedules') }}</a></li>
-        <li class="breadcrumb-item active">Edit</li>
+        <li class="breadcrumb-item active">{{ __('Edit') }} </li>
     </ol>
 @endsection
 
 @section('content')
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -19,15 +18,14 @@
                         <div class="card-body">
                             <form action="{{ route('admin.schedules.update', $schedule->id) }}" method="POST">
                                 @csrf
-                                @method('PATCH') <!-- Required for updating -->
+                                @method('PATCH')
 
                                 <div class="row">
-                                    <!-- Room -->
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="room_id">{{ __('Room') }} *</label>
                                             <select name="room_id" id="room_id" class="select2 form-control @error('room_id') is-invalid @enderror" required>
-                                                <option value="">Select Room</option>
+                                                <option value="">{{ __('Select Room') }} </option>
                                                 @foreach($rooms as $room)
                                                     <option value="{{ $room->id }}" {{ old('room_id', $schedule->room_id) == $room->id ? 'selected' : '' }}>
                                                         {{ $room->name }}
@@ -40,12 +38,11 @@
                                         </div>
                                     </div>
 
-                                    <!-- Movie -->
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="movie_id">{{ __('Movie') }} *</label>
                                             <select name="movie_id" id="movie_id" class="select2 form-control @error('movie_id') is-invalid @enderror" required>
-                                                <option value="">Select Movie</option>
+                                                <option value="">{{ __('Select Movie') }} </option>
                                                 @foreach($movies as $movie)
                                                     <option value="{{ $movie->id }}" {{ old('movie_id', $schedule->movie_id) == $movie->id ? 'selected' : '' }}>
                                                         {{ $movie->title }}
@@ -60,7 +57,6 @@
                                 </div>
 
                                 <div class="row">
-                                    <!-- Start Time -->
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="start_time">{{ __('Start Time') }} *</label>
@@ -73,7 +69,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- End Time -->
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="end_time">{{ __('End Time') }} *</label>
@@ -106,8 +101,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Update Schedule</button>
-                                    <a href="{{ route('admin.schedules.index') }}" class="btn btn-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-primary">{{ __('Update Schedule') }}</button>
+                                    <a href="{{ route('admin.schedules.index') }}" class="btn btn-secondary"> {{ __('Cancel') }} </a>
                                 </div>
                             </form>
                         </div>

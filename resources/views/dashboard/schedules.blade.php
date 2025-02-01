@@ -30,26 +30,29 @@
                     @endphp
 
                     <div class="col">
-                        <div class="card h-50 shadow-sm border-0">
+                        <div class="card h-75 shadow-sm border-0">
                             @if($schedule->movie->poster_url)
                                 <img src="{{ asset($schedule->movie->poster_url) }}"
                                      alt="{{ $schedule->movie->title }} Poster"
-                                     class="img-fluid mb-3 rounded-3 w-100" style="object-fit: cover; height: 600px; width: 300px">
+                                     class="img-fluid mb-3 rounded-3 w-100 w-75"
+                                     style="object-fit: cover; height: 600px; width: 300px">
                             @else
                                 <div class="text-center py-5">
                                     <p class="text-muted">No poster available</p>
                                 </div>
                             @endif
 
-                                <div class="card-body">
-                                    <h5 class="card-title text-center text-uppercase font-weight-bold mb-3"
-                                        style="color: #333; font-size: 1.25rem;">
-                                        {{ $schedule->movie->title }}
-                                    </h5>
-                                    <p class="card-text text-muted" style="font-size: 1rem; line-height: 1.6;">
-                                        {{ Str::limit($schedule->movie->description, 100) }}
-                                    </p>
-                                </div>
+                            <div class="card-body">
+                                <h5 class="card-title text-center text-uppercase font-weight-bold mb-3"
+                                    style="color: #333; font-size: 1.25rem;">
+                                    {{ $schedule->movie->title }}
+                                </h5>
+                                <p class="card-text text-muted" style="font-size: 1rem; line-height: 1.6;"
+                                   title="{{$schedule->movie->description}}">
+                                    {!! $schedule->movie->description ? Str::limit($schedule->movie->description, 45) : '&nbsp;' !!}
+                                </p>
+                                <span class="text-muted">Start at: {{ $startTime }}</span>
+                            </div>
 
                             <div class="card-footer">
                                 <div class="row">
@@ -64,36 +67,6 @@
                             </div>
                         </div>
                     </div>
-
-
-                    {{--<div class="col-md-4 mb-3">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>{{ $schedule->movie->title }}</h3>
-                            </div>
-                            <div class="card-body">
-                                @if($schedule->movie->poster_url)
-                                    <img src="{{ asset($schedule->movie->poster_url) }}"
-                                         alt="{{ $schedule->movie->title }} Poster" class="img-fluid mb-3 w-50">
-                                @else
-                                    <p>No poster available</p>
-                                @endif
-                                <p><strong>Start Time:</strong> {{ $startTime->format('M d, Y h:i A') }}</p>
-                                <p><strong>End Time:</strong> {{ $endTime->format('M d, Y h:i A') }}</p>
-                            </div>
-                            <div class="card-footer text-muted">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        {{ $startTime->diffForHumans() }}
-                                    </div>
-                                    <div class="col-md-4">
-                                        <a href="{{ route('schedule.seats', ['schedule' => $schedule->id]) }}"
-                                           class="btn btn-primary float-right">Book Seat</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>--}}
                 @endforeach
             </div>
         @endif

@@ -6,48 +6,55 @@
     <section class="content">
         <div class="container-fluid">
 
-            <!-- Seat Status Filter -->
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-6">
                             <form method="GET" action="{{ route('admin.bookings.show', $schedule->id) }}">
-                                <label for="filter">Filter Seats:</label>
+                                <label for="filter">{{ __('Filter Seats:') }}</label>
                                 <select name="filter" id="filter" class="select2 form-select"
                                         onchange="this.form.submit()">
-                                    <option value="all" {{ request('filter') === 'all' ? 'selected' : '' }}>All</option>
+                                    <option value="all" {{ request('filter') === 'all' ? 'selected' : '' }}>
+                                        {{ __('All') }}
+                                    </option>
                                     <option value="booked" {{ request('filter') === 'booked' ? 'selected' : '' }}>
-                                        Booked
+                                        {{ __('Booked') }}
                                     </option>
                                     <option
                                         value="not_booked" {{ request('filter') === 'not_booked' ? 'selected' : '' }}>
-                                        Not Booked
+                                        {{ __('Not Booked') }}
                                     </option>
                                 </select>
                             </form>
                         </div>
                     </div>
                 </div>
-
             </div>
+
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="card">
                         <div class="row justify-content-center p-5">
                             <div class="seat-info mb-4">
-                                <p><strong>Available Seats</strong> (Green): These seats are available for booking.</p>
-                                <p><strong>Unavailable Seats</strong> (Red): These seats are already booked.</p>
+                                <p><strong>{{ __('Available Seats') }}</strong> {{ __('(Green): These seats are available for booking.') }}</p>
+                                <p><strong>{{ __('Unavailable Seats') }}</strong>{{ __('(Red): These seats are already booked.') }} </p>
                             </div>
+
+                            @if($seats->isEmpty())
+                                <h4 class="text-danger">
+                                    Data not found
+                                </h4>
+                            @endif
 
                             @foreach($seats as $seat)
                                 <div class="col-md-4 mb-3 parent">
                                     <div class="card" style="width: 18rem;">
                                         <div class="card-body">
                                             <h6 class="card-subtitle mb-2 text-body-secondary">
-                                                Row: {{ $seat->row }} | Seat: {{ $seat->seat }}
+                                                {{ __('Row') }} : {{ $seat->row }} | {{ __('Seat') }} : {{ $seat->seat }}
                                             </h6>
                                             <p class="card-text">
-                                                {{ $seat->isAvailableForSchedule($schedule->id) ? 'Available for booking' : 'Already booked' }}
+                                                {{ $seat->isAvailableForSchedule($schedule->id) ? __('messages.available_for_booking') : __('messages.already_booked') }}
                                             </p>
 
                                             <!-- Button for booking or canceling -->
@@ -60,7 +67,7 @@
                                                         data-seat-row="{{ $seat->row }}"
                                                         data-seat-number="{{ $seat->seat }}"
                                                         data-seat-booking-id="0">
-                                                    Mark as Book
+                                                    {{ __('Mark as Book') }}
                                                 </button>
                                             @else
                                                 <button class="btn btn-danger w-100 seat-button"
@@ -71,7 +78,7 @@
                                                         data-seat-row="{{ $seat->row }}"
                                                         data-seat-number="{{ $seat->seat }}"
                                                         data-seat-booking-id="{{ $seat->booking->id }}">
-                                                    Cancel Booking
+                                                    {{ __('Cancel Booking') }}
                                                 </button>
                                             @endif
                                         </div>
@@ -182,6 +189,7 @@
                     } else {
                         alert(response.message);
                     }
+                    alert(response.message);
                 },
                 error: function () {
                     alert('An error occurred while booking the seat. Please try again.');
@@ -204,21 +212,22 @@
             }
         }
 
-        $('#seatModal').on('show.bs.modal', function (event) {
-            showModalWithSeatDetails(event);
-        });
-
-        $('#confirmBooking').on('click', function () {
-            var modal = $('#seatModal');
-            var seatId = modal.data('seat-id');
-            var scheduleId = modal.data('schedule-id');
-            var seatBookingID = modal.data('seat-booking-id');
-
-            handleBookingAction(seatId, scheduleId, seatBookingID);
-        });
-
         $(document).ready(function () {
+            $('#seatModal').on('show.bs.modal', function (event) {
+                showModalWithSeatDetails(event);
+            });
+
+            $('#confirmBooking').on('click', function () {
+                var modal = $('#seatModal');
+                var seatId = modal.data('seat-id');
+                var scheduleId = modal.data('schedule-id');
+                var seatBookingID = modal.data('seat-booking-id');
+
+                handleBookingAction(seatId, scheduleId, seatBookingID);
+            });
+
             $('#seatFilter').on('change', function () {
+                debugger
                 var filterValue = $(this).val();
 
                 $('.seat-item').each(function () {

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Booking extends Model
 {
@@ -11,12 +12,18 @@ class Booking extends Model
 
     protected $fillable = ['schedule_id', 'room_seat_id'];
 
-    public function schedule()
+    /**
+     * @return BelongsTo
+     */
+    public function schedule(): BelongsTo
     {
         return $this->belongsTo(Schedule::class);
     }
 
-    public function seat()
+    /**
+     * @return BelongsTo
+     */
+    public function seat(): BelongsTo
     {
         return $this->belongsTo(RoomSeats::class, 'room_seat_id');
     }

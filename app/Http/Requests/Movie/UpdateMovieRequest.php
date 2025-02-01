@@ -22,9 +22,11 @@ class UpdateMovieRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:255|unique:movies,title,' . $this->route('movie')->id, // Title should be unique except for the current movie
+            'title' => 'required|string|max:255|unique:movies,title,' . $this->route('movie')->id,
             'poster_url' => 'image|mimes:jpeg,png,jpg,gif,svg,webp',
             'description' => 'nullable|string',
+            'min_allowed_age' => 'nullable|integer|min:0',
+            'genre_id' => 'nullable|exists:genres,id',
         ];
     }
 
@@ -33,7 +35,7 @@ class UpdateMovieRequest extends FormRequest
      *
      * @return array
      */
-    public function messages()
+    public function messages(): array
     {
         return [
             'title.required' => 'The movie title is required.',

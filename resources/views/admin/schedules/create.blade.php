@@ -5,7 +5,7 @@
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.schedules.index') }}">{{ __('Schedules') }}</a></li>
-        <li class="breadcrumb-item active">Create</li>
+        <li class="breadcrumb-item active">{{ __('Create') }}</li>
     </ol>
 @endsection
 
@@ -25,7 +25,7 @@
                                         <div class="form-group">
                                             <label for="room_id">{{ __('Room') }} *</label>
                                             <select name="room_id" id="room_id" class="select2 form-control @error('room_id') is-invalid @enderror" required>
-                                                <option value="">Select Room</option>
+                                                <option value="">{{ __('Select Room') }}</option>
                                                 @foreach($rooms as $room)
                                                     <option value="{{ $room->id }}" {{ old('room_id') == $room->id ? 'selected' : '' }}>{{ $room->name }}</option>
                                                 @endforeach
@@ -41,7 +41,7 @@
                                         <div class="form-group">
                                             <label for="movie_id">{{ __('Movie') }} *</label>
                                             <select name="movie_id" id="movie_id" class="select2 form-control @error('movie_id') is-invalid @enderror" required>
-                                                <option value="">Select Movie</option>
+                                                <option value="">{{ __('Select Movie') }}</option>
                                                 @foreach($movies as $movie)
                                                     <option value="{{ $movie->id }}" {{ old('movie_id') == $movie->id ? 'selected' : '' }}>{{ $movie->title }}</option>
                                                 @endforeach
@@ -95,8 +95,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Create Schedule</button>
-                                    <a href="{{ route('admin.schedules.index') }}" class="btn btn-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-primary"> {{ __('Create Schedule') }} </button>
+                                    <a href="{{ route('admin.schedules.index') }}" class="btn btn-secondary">{{ __('Cancel') }} </a>
                                 </div>
                             </form>
                         </div>

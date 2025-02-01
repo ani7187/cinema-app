@@ -5,31 +5,32 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            <!-- Rooms Management Header -->
+
+            @include('includes.alert')
+
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <a href="{{ route('admin.rooms.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Add New Room
+                                <i class="fas fa-plus"></i> {{ __('Add New Room') }}
                             </a>
                         </div>
                         <div class="card-body">
-                            <!-- Check if there are rooms -->
                             @if($rooms->isEmpty())
                                 <div class="alert alert-warning">
-                                    Rooms not found.
+                                    {{ __('Rooms not found.') }}
                                 </div>
                             @else
                                 <table class="table table-hover text-nowrap">
                                     <thead>
                                     <tr>
-                                        <th class="sorting sorting_asc">ID</th>
-                                        <th>Room Name</th>
-                                        <th>Room rows</th>
-                                        <th>Seats per row</th>
-                                        <th>Is published</th>
-                                        <th>Actions</th>
+                                        <th class="sorting sorting_asc">N</th>
+                                        <th> {{ __('Room Name')}} </th>
+                                        <th> {{ __('Room rows')}} </th>
+                                        <th> {{ __('Seats per row')}} </th>
+                                        <th> {{ __('Is published')}} </th>
+                                        <th> {{ __('Actions')}} </th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -43,14 +44,14 @@
                                             <td>
                                                 <a href="{{ route('admin.rooms.edit', $room->id) }}"
                                                    class="btn btn-primary btn-sm">
-                                                    <i class="fas fa-edit"></i> Edit
+                                                    <i class="fas fa-edit"></i> {{ __('Edit') }}
                                                 </a>
                                                 <form action="{{ route('admin.rooms.destroy', $room->id) }}"
                                                       method="POST" class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-trash"></i> Delete
+                                                        <i class="fas fa-trash"></i> {{ __('Delete') }}
                                                     </button>
                                                 </form>
                                             </td>
@@ -60,7 +61,6 @@
                                 </table>
                             @endif
 
-                            <!-- Pagination -->
                             <div class="d-flex justify-content-end pt-4">
                                 {{ $rooms->links('pagination::bootstrap-4') }}
                             </div>
@@ -70,5 +70,4 @@
             </div>
         </div>
     </section>
-
 @endsection

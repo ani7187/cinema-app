@@ -32,7 +32,32 @@ class UpdateScheduleRequest extends FormRequest
         ];
     }
 
-    public function withValidator($validator)
+    /**
+     * @return string[]
+     */
+    public function messages(): array
+    {
+        return [
+            'room_id.required' => 'The room is required.',
+            'room_id.exists' => 'The selected room does not exist.',
+            'movie_id.required' => 'The movie is required.',
+            'movie_id.exists' => 'The selected movie does not exist.',
+            'start_time.required' => 'The start time is required.',
+            'start_time.date' => 'The start time must be a valid date.',
+            'start_time.after' => 'The start time must be in the future.',
+            'start_time.unique' => 'There is already a schedule for this room at the selected time.',
+            'end_time.required' => 'The end time is required.',
+            'end_time.date' => 'The end time must be a valid date.',
+            'end_time.after' => 'The end time must be after the start time.',
+            'end_time.unique' => 'There is already a schedule for this room at the selected time.',
+        ];
+    }
+
+    /**
+     * @param $validator
+     * @return void
+     */
+    public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
             $scheduleId = $this->route('schedule')->id; // Get the ID of the schedule being updated
@@ -55,23 +80,5 @@ class UpdateScheduleRequest extends FormRequest
                 $validator->errors()->add('start_time', 'A schedule already exists for this room during this time.');
             }
         });
-    }
-
-    public function messages()
-    {
-        return [
-            'room_id.required' => 'The room is required.',
-            'room_id.exists' => 'The selected room does not exist.',
-            'movie_id.required' => 'The movie is required.',
-            'movie_id.exists' => 'The selected movie does not exist.',
-            'start_time.required' => 'The start time is required.',
-            'start_time.date' => 'The start time must be a valid date.',
-            'start_time.after' => 'The start time must be in the future.',
-            'start_time.unique' => 'There is already a schedule for this room at the selected time.',
-            'end_time.required' => 'The end time is required.',
-            'end_time.date' => 'The end time must be a valid date.',
-            'end_time.after' => 'The end time must be after the start time.',
-            'end_time.unique' => 'There is already a schedule for this room at the selected time.',
-        ];
     }
 }

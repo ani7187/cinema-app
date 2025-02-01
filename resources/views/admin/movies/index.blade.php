@@ -5,28 +5,29 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
+            @include('includes.alert')
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <a href="{{ route('admin.movies.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Add movie
+                                <i class="fas fa-plus"></i> {{ __('Add movie') }}
                             </a>
                         </div>
                         <div class="card-body">
                             @if($movies->isEmpty())
                                 <div class="alert alert-warning">
-                                    Movies not found.
+                                    {{ __('Movies not found.') }}
                                 </div>
                             @else
                                 <table class="table table-hover text-nowrap">
                                     <thead>
                                     <tr>
-                                        <th class="sorting sorting_asc">ID</th>
-                                        <th>Title</th>
-                                        <th>Poster</th>
-                                        <th>Description</th>
-                                        <th>Creation date</th>
+                                        <th class="sorting sorting_asc"> {{ __('N') }} </th>
+                                        <th> {{ __('Title') }} </th>
+                                        <th> {{ __('Poster') }} </th>
+                                        <th> {{ __('Description') }}</th>
+                                        <th> {{ __('Creation date') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -38,7 +39,9 @@
                                                 <img src="{{ asset($movie->poster_url) }}" alt="Poster"
                                                      style="max-width: 20px; max-height: 50px;">
                                             </td>
-                                            <td>{{ $movie->description }}</td>
+                                            <td><span
+                                                    title="{{$movie->description}}">{{ Str::limit($movie->description, 100) }}</span>
+                                            </td>
                                             <td>{{ $movie->created_at }}</td>
                                             <td>
                                                 <a href="{{ route('admin.movies.edit', $movie->id) }}"
@@ -59,7 +62,6 @@
                                     </tbody>
                                 </table>
                             @endif
-                            <!-- Pagination -->
                             <div class="d-flex justify-content-end pt-4">
                                 {{ $movies->links('pagination::bootstrap-4') }}
                             </div>

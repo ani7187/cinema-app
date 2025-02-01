@@ -14,7 +14,7 @@ class SeatBookingController extends Controller
         $seatId = $request->input('seat_id');
 
         // Check if there is already a booking for this seat
-        $existingBooking = Booking::where('seat_id', $seatId)->first();
+        $existingBooking = Booking::where('room_seat_id', $seatId)->first();
 
         if ($existingBooking) {
             return response()->json(['success' => false, 'message' => 'Seat is already booked.']);

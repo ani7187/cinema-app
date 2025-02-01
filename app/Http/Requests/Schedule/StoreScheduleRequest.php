@@ -34,7 +34,7 @@ class StoreScheduleRequest extends FormRequest
     /**
      * Custom validation logic to check for overlapping schedules.
      */
-    public function withValidator($validator)
+    public function withValidator($validator): void
     {
         $validator->after(function ($validator) {
             $startTime = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $this->start_time)->format('Y-m-d H:i:s');
@@ -57,7 +57,10 @@ class StoreScheduleRequest extends FormRequest
         });
     }
 
-    public function messages()
+    /**
+     * @return string[]
+     */
+    public function messages(): array
     {
         return [
             'room_id.required' => 'The room is required.',

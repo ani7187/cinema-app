@@ -5,23 +5,40 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Movie\StoreMovieRequest;
 use App\Http\Requests\Movie\UpdateMovieRequest;
+use App\Models\Genre;
 use App\Models\Movie;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Foundation\Application as App;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
 {
-    public function index()
+    /**
+     * @return App|Factory|View|\Illuminate\Foundation\Application
+     */
+    public function index(): View|\Illuminate\Foundation\Application|Factory|App
     {
-        $movies = Movie::paginate(10);
+        $movies = Movie::orderBy('created_at', 'desc')->paginate(10);
         return view('admin.movies.index', compact('movies'));
     }
 
-    public function create()
+    /**
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
+     */
+    public function create(): View|\Illuminate\Foundation\Application|Factory|Application
     {
-        return view('admin.movies.create');
+        $genres = Genre::all();
+        return view('admin.movies.create', compact('genres'));
     }
 
-    public function store(StoreMovieRequest $request)
+    /**
+     * @param StoreMovieRequest $request
+     * @return RedirectResponse
+     */
+    public function store(StoreMovieRequest $request): RedirectResponse
     {
         $data = $request->validated();
         if ($request->hasFile('poster_url')) {
@@ -35,12 +52,21 @@ class MovieController extends Controller
         return redirect()->route('admin.movies.index')->with('success', 'Movie created successfully.');
     }
 
-    public function edit(Movie $movie)
+    /**
+     * @param Movie $movie
+     * @return App|Factory|View|\Illuminate\Foundation\Application
+     */
+    public function edit(Movie $movie): \Illuminate\Foundation\Application|View|Factory|App
     {
         return view('admin.movies.edit', compact('movie'));
     }
 
-    public function update(UpdateMovieRequest $request, Movie $movie)
+    /**
+     * @param UpdateMovieRequest $request
+     * @param Movie $movie
+     * @return RedirectResponse
+     */
+    public function update(UpdateMovieRequest $request, Movie $movie): RedirectResponse
     {
         $data = $request->validated();
         if ($request->hasFile('poster_url')) {
@@ -52,10 +78,17 @@ class MovieController extends Controller
         return redirect()->route('admin.movies.index')->with('success', 'Movie updated successfully.');
     }
 
-    public function destroy(Movie $movie)
+    /**
+     * @param Movie $movie
+     * @return RedirectResponse
+     */
+    public function destroy(Movie $movie): RedirectResponse
     {
-        $movie->delete();
+        if ($movie->hasActiveSchedules()) {
+            return redirect()->back()->with('error', 'Cannot delete movie. There are active schedules.');
+        }
 
+        $movie->delete();
         return redirect()->route('admin.movies.index')->with('success', 'Movie deleted successfully.');
     }
 }

@@ -5,32 +5,31 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            <!-- Schedules Management Header -->
+            @include('includes.alert')
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <a href="{{ route('admin.schedules.create') }}" class="btn btn-primary">
-                                <i class="fas fa-plus"></i> Add New Schedule
+                                <i class="fas fa-plus"></i> {{ __('Add new schedule') }}
                             </a>
                         </div>
                         <div class="card-body">
-                            <!-- Check if there are schedules -->
                             @if($schedules->isEmpty())
                                 <div class="alert alert-warning">
-                                    Schedules not found.
+                                    {{ __('Schedules not found.') }}
                                 </div>
                             @else
                                 <table class="table table-hover text-nowrap">
                                     <thead>
                                     <tr>
-                                        <th class="sorting sorting_asc">ID</th>
-                                        <th>Room Name</th>
-                                        <th>Movie Title</th>
-                                        <th>Start Time</th>
-                                        <th>End Time</th>
-                                        <th>Is published</th>
-                                        <th>Actions</th>
+                                        <th class="sorting sorting_asc"> {{ __('N') }}</th>
+                                        <th> {{ __('Room Name') }} </th>
+                                        <th> {{ __('Movie Title') }} </th>
+                                        <th> {{ __('Start Time') }} </th>
+                                        <th> {{ __('End Time') }} </th>
+                                        <th> {{ __('Is published') }} </th>
+                                        <th> {{ __('Actions') }} </th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -52,7 +51,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger btn-sm">
-                                                        <i class="fas fa-trash"></i> Delete
+                                                        <i class="fas fa-trash"></i> {{ __('Delete')}}
                                                     </button>
                                                 </form>
                                             </td>
@@ -62,7 +61,6 @@
                                 </table>
                             @endif
 
-                            <!-- Pagination -->
                             <div class="d-flex justify-content-end pt-4">
                                 {{ $schedules->links('pagination::bootstrap-4') }}
                             </div>

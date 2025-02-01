@@ -2,8 +2,6 @@
 
 @section('content')
     <div class="container mt-5">
-
-
         <h1 class="text-center pb-5" style="font-size: 36px; font-weight: bold; color: #343a40;">
             <span style="text-decoration: underline; font-style: italic;">
                 Select a Room
@@ -37,7 +35,6 @@
             @endif
         </div>
 
-        <!-- Pagination with center alignment -->
         <div class="d-flex justify-content-center mt-4">
             {{ $rooms->links('pagination::bootstrap-4') }}
         </div>

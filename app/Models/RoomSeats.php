@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class RoomSeats extends Model
 {
@@ -11,17 +13,27 @@ class RoomSeats extends Model
 
     protected $fillable = ['room_id', 'row', 'seat'];
 
-    public function room()
+    /**
+     * @return BelongsTo
+     */
+    public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
     }
 
-    public function bookings()
+    /**
+     * @return HasMany
+     */
+    public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class, 'room_seat_id');
     }
 
-    public function isAvailableForSchedule($scheduleId)
+    /**
+     * @param $scheduleId
+     * @return bool
+     */
+    public function isAvailableForSchedule($scheduleId): bool
     {
         return $this->bookings()->where('schedule_id', $scheduleId)->doesntExist();
     }

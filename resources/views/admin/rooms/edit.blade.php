@@ -4,12 +4,11 @@
 @section('breadcrumb')
     <ol class="breadcrumb float-sm-right">
         <li class="breadcrumb-item"><a href="{{ route('admin.rooms.index') }}">{{ __('Rooms') }}</a></li>
-        <li class="breadcrumb-item active">Edit</li>
+        <li class="breadcrumb-item active"> {{ __('Edit')}} </li>
     </ol>
 @endsection
 
 @section('content')
-    <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
             <div class="row">
@@ -27,10 +26,9 @@
                         <div class="card-body">
                             <form action="{{ route('admin.rooms.update', $room->id) }}" method="POST">
                                 @csrf
-                                @method('PATCH') {{-- Laravel requires this for updating resources --}}
+                                @method('PATCH')
 
                                 <div class="row">
-                                    <!-- Room Name -->
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="name">{{ __('Room Name') }} *</label>
@@ -43,7 +41,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Room Rows -->
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="room_rows">{{ __('Room Rows') }} *</label>
@@ -57,7 +54,6 @@
                                         </div>
                                     </div>
 
-                                    <!-- Seats Per Row -->
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label for="seats_per_row">{{ __('Seats per Row') }} *</label>
@@ -71,7 +67,7 @@
                                             @enderror
                                         </div>
                                     </div>
-                                    <!-- Is Published -->
+
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox">
@@ -90,17 +86,14 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary">Update Room</button>
-                                    <a href="{{ route('admin.rooms.index') }}" class="btn btn-secondary">Cancel</a>
+                                    <button type="submit" class="btn btn-primary"> {{ __('Update Room')}} </button>
+                                    <a href="{{ route('admin.rooms.index') }}" class="btn btn-secondary"> {{ __('Cancel')}} </a>
                                 </div>
                             </form>
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
-    <!-- /.content -->
 @endsection
