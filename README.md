@@ -2,7 +2,7 @@
 
 A cinema booking system where users can reserve a seat. The system allows an admin user to manage movie sessions and bookings.
 
-- Seat Reservation: Users can select and book seats for movies..
+- Seat Reservation: Users can select and book seats for movies.
 - Admin Panel: Admins can manage users, movie sessions, and bookings.
 
 ## Setup
@@ -13,46 +13,33 @@ Ensure you have the following installed:
 - Node.js
 
 ## Installation
-- Clone the repository:
+- Clone the repository: git clone https://github.com/ani7187/cinema-app.git
+- cd cinema-app
+- Copy the .env.example file to .env and configure your environment variables
+- npm install
+- npm run dev
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Run without Docker
+- In your .env file, change the database connection to SQLite: DB_CONNECTION=sqlite
+- Create db file: database/database.sqlite
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Run with Docker
+- docker-compose up --build -d 
+- Go into container: docker-compose exec php bash
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Config
+- Run database migrations: php artisan migrate
+- Seed data: php artisan db:seed
+- php artisan storage:link
+- Access the app at http://localhost:8000.
 
-## Laravel Sponsors
+## Usage
+### Admin User Setup
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+- Create an admin user via the command:
+  php artisan app:create-admin-user
+- Admin tools: http://localhost:8000/admin
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Contact
+For more details or to report bugs, contact us at:
+- Email: azizyana02@gmail.com

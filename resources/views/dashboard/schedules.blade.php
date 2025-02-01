@@ -30,7 +30,7 @@
                     @endphp
 
                     <div class="col">
-                        <div class="card h-100 shadow-sm border-0">
+                        <div class="card h-50 shadow-sm border-0">
                             @if($schedule->movie->poster_url)
                                 <img src="{{ asset($schedule->movie->poster_url) }}"
                                      alt="{{ $schedule->movie->title }} Poster"
