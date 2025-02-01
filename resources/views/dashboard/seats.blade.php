@@ -1,0 +1,117 @@
+@extends('layouts.app')
+
+@section('content')
+    <div class="container mt-4">
+        <h1 class="text-center pb-5">Seats for Movie: {{ $schedule->movie->title }}</h1>
+
+        <h3 class="text-center">Start Time: {{ \Carbon\Carbon::parse($schedule->start_time)->format('M d, Y h:i A') }}</h3>
+
+        <!-- Screen representation with style -->
+        <div class="d-flex justify-content-center mb-4">
+            <div class="bg-dark text-white p-3 w-50 text-center rounded" style="font-size: 20px; font-weight: bold;">
+                SCREEN
+            </div>
+        </div>
+
+        <!-- Seat layout with additional margin and centered design -->
+        <div class="row justify-content-center">
+            @foreach($seats as $seat)
+                <div class="col-md-2 mb-3">
+                    @if($seat->isAvailableForSchedule($schedule->id))
+                        <button class="btn btn-success w-100 seat-button"
+                                data-bs-toggle="modal"
+                                data-bs-target="#seatModal"
+                                data-seat-id="{{ $seat->id }}"
+                                data-schedule-id="{{ $schedule->id }}"
+                                data-seat-row="{{ $seat->row }}"
+                                data-seat-number="{{ $seat->seat }}">
+                            Seat {{ $seat->row }}-{{ $seat->seat }}
+                        </button>
+                    @else
+                        <button class="btn btn-danger w-100 seat-button" disabled>
+                            Seat {{ $seat->row }}-{{ $seat->seat }}
+                        </button>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    </div>
+
+    <!-- Modal for Booking Confirmation -->
+    <div class="modal fade" id="seatModal" tabindex="-1" aria-labelledby="seatModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="seatModalLabel">Confirm Seat Booking</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to book this seat?</p>
+                    <p id="seatDetails" class="font-weight-bold"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="confirmBooking">Confirm Booking</button>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('scripts')
+    <script>
+        // Handle button click to open the modal and show seat details
+        $('#seatModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var seatId = button.data('seat-id'); // Extract info from data-* attributes
+            var seatRow = button.data('seat-row');
+            var seatNumber = button.data('seat-number');
+            var seatDetails = 'Row: ' + seatRow + ' | Seat: ' + seatNumber;
+
+            var scheduleId = button.data('schedule-id');
+
+            // Update the modal's content with seat details
+            var modal = $(this);
+            modal.find('.modal-body #seatDetails').text(seatDetails);
+
+            // Store data for AJAX request
+            modal.data('seat-id', seatId);
+            modal.data('schedule-id', scheduleId);
+        });
+
+        // Confirm booking action
+        $('#confirmBooking').on('click', function () {
+            var modal = $('#seatModal');
+            var seatId = modal.data('seat-id');
+            var scheduleId = modal.data('schedule-id');
+
+            // Send an AJAX request to book the seat
+            $.ajax({
+                url: '{{ route("book.seat") }}',
+                method: 'POST',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    seat_id: seatId,
+                    schedule_id: scheduleId
+                },
+                success: function (response) {
+                    if (response.success) {
+                        // Update the seat status on the UI (change button to booked)
+                        $('button[data-seat-id="' + seatId + '"]')
+                            .removeClass('btn-success')
+                            .addClass('btn-danger')
+                            .attr('disabled', true)
+
+                        // Hide the modal after booking
+                        $('#seatModal').modal('hide');
+                    } else {
+                        alert(response.message);
+                    }
+                },
+                error: function () {
+                    alert('An error occurred while booking the seat. Please try again.');
+                }
+            });
+        });
+    </script>
+@endsection
