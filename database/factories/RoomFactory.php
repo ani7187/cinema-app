@@ -20,6 +20,7 @@ class RoomFactory extends Factory
             'name' => $this->faker->word . ' Room',
             'rows' => $this->faker->numberBetween(5, 20),
             'seats_per_row' => $this->faker->numberBetween(5, 15),
+            'published' => true,
         ];
     }
 }
