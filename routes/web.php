@@ -19,13 +19,15 @@ Route::prefix('admin')->group(function () {
 });
 
 Route::prefix('admin')->middleware(['auth', 'admin'])->name('admin.')->group(function () {
-    Route::get('/schedule/bookings/{schedule}', [BookingController::class, 'show'])->name('bookings.show');
-
     Route::resource('rooms', RoomController::class)->except(['show']);
     Route::resource('movies', MovieController::class)->except(['show']);
     Route::resource('schedules', ScheduleController::class)->except(['show']);
-    Route::resource('bookings', BookingController::class)->except(['show', 'edit', 'update', 'create', 'store']);
 
+    Route::get('/schedule/bookings/{schedule}', [BookingController::class, 'show'])->name('bookings.show');
+    Route::get('bookings', [BookingController::class, 'index'])->name('bookings.index');
+    Route::delete('bookings/{booking}', [BookingController::class, 'destroy'])->name('bookings.destroy');
+
+//    Route::resource('bookings', BookingController::class)->except(['show', 'edit', 'update', 'create', 'store']);
 });
 
 Route::fallback(function () {

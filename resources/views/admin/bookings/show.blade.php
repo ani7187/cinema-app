@@ -67,7 +67,7 @@
                                                         data-seat-row="{{ $seat->row }}"
                                                         data-seat-number="{{ $seat->seat }}"
                                                         data-seat-booking-id="0">
-                                                    {{ __('Mark as Book') }}
+                                                    {{ __('Book Seat') }}
                                                 </button>
                                             @else
                                                 <button class="btn btn-danger w-100 seat-button"
@@ -121,125 +121,130 @@
 
 @section('scripts')
     <script>
-        function showModalWithSeatDetails(event) {
-            var button = $(event.relatedTarget);
-            var seatId = button.data('seat-id');
-            var seatRow = button.data('seat-row');
-            var seatNumber = button.data('seat-number');
-            var seatBookingID = button.data('seat-booking-id');
-            var scheduleId = button.data('schedule-id');
-
-            var seatDetails = 'Row: ' + seatRow + ' | Seat: ' + seatNumber;
-            var innerText = seatBookingID
-                ? 'Are you sure you want to cancel the booking for this seat?'
-                : 'Are you sure you want to book this seat?';
-
-            var modal = $('#seatModal');
-            modal.find('.modal-body #question').text(innerText);
-            modal.find('.modal-body #seatDetails').text(seatDetails);
-
-            modal.data('seat-id', seatId);
-            modal.data('schedule-id', scheduleId);
-            modal.data('seat-booking-id', seatBookingID);
-        }
-
-        function handleBookingAction(seatId, scheduleId, seatBookingID) {
-            if (seatBookingID) {
-                cancelBooking(seatId, seatBookingID);
-            } else {
-                bookSeat(seatId, scheduleId);
-            }
-        }
-
-        function cancelBooking(seatId, seatBookingID) {
-            $.ajax({
-                url: '{{ route("admin.bookings.destroy", ":booking") }}'.replace(':booking', seatBookingID),
-                method: 'DELETE',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    booking: seatBookingID,
-                },
-                success: function (response) {
-                    if (response.success) {
-                        updateSeatUI(seatId, 'btn-success', 'Mark as Book');
-                        $('#seatModal').modal('hide');
-                    } else {
-                        alert(response.message);
-                    }
-                },
-                error: function () {
-                    alert('An error occurred while canceling the booking. Please try again.');
-                }
-            });
-        }
-
-        function bookSeat(seatId, scheduleId) {
-            $.ajax({
-                url: '{{ route("book.seat") }}',
-                method: 'POST',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    seat_id: seatId,
-                    schedule_id: scheduleId
-                },
-                success: function (response) {
-                    if (response.success) {
-                        updateSeatUI(seatId, 'btn-danger', 'Cancel Booking');
-                        $('#seatModal').modal('hide');
-                    } else {
-                        alert(response.message);
-                    }
-                    alert(response.message);
-                },
-                error: function () {
-                    alert('An error occurred while booking the seat. Please try again.');
-                }
-            });
-        }
-
-        function updateSeatUI(seatId, buttonClass, buttonText) {
-            let selectedFilter = document.getElementById('filter').value;
-
-            console.log(selectedFilter);
-            if (selectedFilter === 'all') {
-                $('button[data-seat-id="' + seatId + '"]')
-                    .removeClass('btn-danger btn-success')
-                    .addClass(buttonClass)
-                    .text(buttonText)
-                    .blur();
-            } else {
-                $('button[data-seat-id="' + seatId + '"]').closest('.parent').remove();
-            }
-        }
-
         $(document).ready(function () {
-            $('#seatModal').on('show.bs.modal', function (event) {
-                showModalWithSeatDetails(event);
+            // This function will update the modal with the current button's data attributes
+            $('button[data-seat-id]').on('click', function() {
+                var seatId = $(this).data('seat-id');
+                var seatRow = $(this).data('seat-row');
+                var seatNumber = $(this).data('seat-number');
+                var seatBookingID = $(this).data('seat-booking-id');
+                var scheduleId = $(this).data('schedule-id');
+
+                // Update modal's data attributes before it opens
+                var modal = $('#seatModal');
+                modal.data('seat-id', seatId);
+                modal.data('schedule-id', scheduleId);
+                modal.data('seat-booking-id', seatBookingID);
+                modal.data('seat-row', seatRow);
+                modal.data('seat-number', seatNumber);
             });
 
+            // This function will run when the modal is triggered
+            $('#seatModal').on('show.bs.modal', function (event) {
+                var modal = $(this);  // Reference to the modal
+
+                // Fetch the data attributes from the modal
+                var seatId = modal.data('seat-id');
+                var seatRow = modal.data('seat-row');
+                var seatNumber = modal.data('seat-number');
+                var seatBookingID = modal.data('seat-booking-id');
+                var scheduleId = modal.data('schedule-id');
+
+                // Prepare seat details text
+                var seatDetails = 'Row: ' + seatRow + ' | Seat: ' + seatNumber;
+                var innerText = seatBookingID
+                    ? 'Are you sure you want to cancel the booking for this seat?'
+                    : 'Are you sure you want to book this seat?';
+
+                // Set the modal content
+                modal.find('.modal-body #question').text(innerText);
+                modal.find('.modal-body #seatDetails').text(seatDetails);
+            });
+
+            // Handle the booking or cancellation logic when the confirm button is clicked
             $('#confirmBooking').on('click', function () {
                 var modal = $('#seatModal');
                 var seatId = modal.data('seat-id');
                 var scheduleId = modal.data('schedule-id');
                 var seatBookingID = modal.data('seat-booking-id');
 
-                handleBookingAction(seatId, scheduleId, seatBookingID);
+                if (seatBookingID) {
+                    cancelBooking(seatId, seatBookingID);
+                } else {
+                    bookSeat(seatId, scheduleId);
+                }
             });
 
-            $('#seatFilter').on('change', function () {
-                debugger
-                var filterValue = $(this).val();
+            // AJAX to cancel the booking
+            function cancelBooking(seatId, seatBookingID) {
+                $.ajax({
+                    url: '{{ route("admin.bookings.destroy", ":booking") }}'.replace(':booking', seatBookingID),
+                    method: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        booking: seatBookingID,
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            // Update the button's data-seat-booking-id attribute to 0 (unbooked)
+                            $('button[data-seat-id="' + seatId + '"]').data('seat-booking-id', 0);
 
-                $('.seat-item').each(function () {
-                    var seatStatus = $(this).data('status');
+                            // Update the button UI
+                            updateSeatUI(seatId, 'btn-success', 'Book Seat');
 
-                    if (filterValue === 'all' || seatStatus === filterValue) {
-                        $(this).show();
-                    } else {
-                        $(this).hide();
+                            // Close the modal
+                            $('#seatModal').modal('hide');
+                        }
+                        alert(response.message);
+                    },
+                    error: function () {
+                        alert('An error occurred while canceling the booking. Please try again.');
                     }
                 });
-            });
+            }
+
+            // AJAX to book the seat
+            function bookSeat(seatId, scheduleId) {
+                $.ajax({
+                    url: '{{ route("book.seat") }}',
+                    method: 'POST',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        seat_id: seatId,
+                        schedule_id: scheduleId
+                    },
+                    success: function (response) {
+                        if (response.success) {
+                            // Update the button's data-seat-booking-id attribute with the new booking ID
+                            $('button[data-seat-id="' + seatId + '"]').data('seat-booking-id', response.id);
+
+                            // Update the button UI
+                            updateSeatUI(seatId, 'btn-danger', 'Cancel Booking');
+
+                            // Close the modal
+                            $('#seatModal').modal('hide');
+                        }
+                        alert(response.message);
+                    },
+                    error: function () {
+                        alert('An error occurred while booking the seat. Please try again.');
+                    }
+                });
+            }
+
+            // Update seat button UI after booking or canceling
+            function updateSeatUI(seatId, buttonClass, buttonText) {
+                let selectedFilter = document.getElementById('filter').value;
+                if (selectedFilter === 'all') {
+                    $('button[data-seat-id="' + seatId + '"]')
+                        .removeClass('btn-danger btn-success')
+                        .addClass(buttonClass)
+                        .text(buttonText)
+                        .blur();
+                } else {
+                    $('button[data-seat-id="' + seatId + '"]').closest('.parent').remove();
+                }
+            }
         });
     </script>
 @endsection

@@ -58,7 +58,7 @@ class BookingController extends Controller
     {
         $booking->delete();
 
-        return response()->json(['success' => true, 'message' => 'Seat booked successfully.']);
+        return response()->json(['success' => true, 'message' => 'Booking canceled successfully.']);
     }
 }
 

@@ -28,11 +28,11 @@ class SeatBookingController extends Controller
             return response()->json(['success' => false, 'message' => 'Seat not found.']);
         }
 
-        Booking::create([
+        $booking = Booking::create([
             'room_seat_id' => $seatId,
             'schedule_id' => $request->input('schedule_id'),
         ]);
 
-        return response()->json(['success' => true, 'message' => 'Seat booked successfully.']);
+        return response()->json(['success' => true, 'message' => 'Seat booked successfully.', 'id' => $booking->id]);
     }
 }
