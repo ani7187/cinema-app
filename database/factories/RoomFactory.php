@@ -17,7 +17,7 @@ class RoomFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->word . ' Room',
+            'name' => $this->faker->unique()->word . ' Room',
             'rows' => $this->faker->numberBetween(5, 20),
             'seats_per_row' => $this->faker->numberBetween(5, 15),
             'published' => true,

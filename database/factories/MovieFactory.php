@@ -17,7 +17,7 @@ class MovieFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => $this->faker->title,
+            'title' => $this->faker->unique()->title,
             'poster_url' => $this->faker->imageUrl(),
             'description' => $this->faker->sentence,
             'genre_id' => $this->faker->randomElement(\App\Models\Genre::pluck('id')->toArray()),
