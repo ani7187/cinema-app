@@ -28,10 +28,12 @@ Ensure you have the following installed:
 - Go into container: docker-compose exec php bash
 
 ## Config
+- composer install
 - php artisan key:generate
 - Run database migrations: php artisan migrate
 - Seed data: php artisan db:seed
 - php artisan storage:link
+- php artisan serve
 - Access the app at http://localhost:8000.
 
 ## Usage
