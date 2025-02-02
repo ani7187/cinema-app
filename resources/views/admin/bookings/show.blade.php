@@ -54,7 +54,7 @@
                                                 {{ __('Row') }} : {{ $seat->row }} | {{ __('Seat') }} : {{ $seat->seat }}
                                             </h6>
                                             <p class="card-text">
-                                                {{ $seat->isAvailableForSchedule($schedule->id) ? __('messages.available_for_booking') : __('messages.already_booked') }}
+                                                {{ $seat->isAvailableForSchedule($schedule->id) ? __('Available for booking') : __('Already booked') }}
                                             </p>
 
                                             <!-- Button for booking or canceling -->

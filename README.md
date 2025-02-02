@@ -3,7 +3,7 @@
 A cinema booking system where users can reserve a seat. The system allows an admin user to manage movie sessions and bookings.
 
 - Seat Reservation: Users can select and book seats for movies.
-- Admin Panel: Admins can manage users, movie sessions, and bookings.
+- Admin Panel: Admins can manage movies, movie schedules, and bookings.
 
 ## Setup
 ### Prerequisites
@@ -28,6 +28,7 @@ Ensure you have the following installed:
 - Go into container: docker-compose exec php bash
 
 ## Config
+- php artisan key:generate
 - Run database migrations: php artisan migrate
 - Seed data: php artisan db:seed
 - php artisan storage:link

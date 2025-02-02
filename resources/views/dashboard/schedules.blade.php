@@ -30,38 +30,40 @@
                     @endphp
 
                     <div class="col">
-                        <div class="card h-75 shadow-sm border-0">
+                        <div class="card h-100 shadow-sm border-0">
                             @if($schedule->movie->poster_url)
                                 <img src="{{ asset($schedule->movie->poster_url) }}"
                                      alt="{{ $schedule->movie->title }} Poster"
-                                     class="img-fluid mb-3 rounded-3 w-100 w-75"
-                                     style="object-fit: cover; height: 600px; width: 300px">
+                                     class="img-fluid mb-2 rounded-3 w-100"
+                                     style="object-fit: cover; height: 600px;"> <!-- Reduced height -->
                             @else
-                                <div class="text-center py-5">
+                                <div class="text-center py-3">
                                     <p class="text-muted">No poster available</p>
                                 </div>
                             @endif
 
-                            <div class="card-body">
-                                <h5 class="card-title text-center text-uppercase font-weight-bold mb-3"
-                                    style="color: #333; font-size: 1.25rem;">
-                                    {{ $schedule->movie->title }}
+                            <div class="card-body p-3">
+                                <h5 class="card-title text-center text-uppercase font-weight-bold mb-2"
+                                    style="color: #333; font-size: 1rem;">
+                                    <b>{{ $schedule->movie->title }}</b>
+                                    {{ $schedule->movie->min_allowed_age ? $schedule->movie->min_allowed_age . '+' : ''}}
                                 </h5>
-                                <p class="card-text text-muted" style="font-size: 1rem; line-height: 1.6;"
+                                <p>Genre: {{ $schedule->movie->genre?->name }}</p>
+                                <p class="card-text text-muted" style="font-size: 0.9rem; line-height: 1.4;"
                                    title="{{$schedule->movie->description}}">
-                                    {!! $schedule->movie->description ? Str::limit($schedule->movie->description, 45) : '&nbsp;' !!}
+                                    {!! $schedule->movie->description ? Str::limit($schedule->movie->description, 40) : '&nbsp;' !!}
                                 </p>
-                                <span class="text-muted">Start at: {{ $startTime }}</span>
+                                <span class="text-muted" style="font-size: 0.9rem;">Start at: {{ $startTime }}</span>
                             </div>
 
-                            <div class="card-footer">
+                            <div class="card-footer p-2">
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <p class="text-muted">{{ $startTime->diffForHumans() }}</p>
+                                        <p class="text-muted m-0" style="font-size: 0.8rem;">{{ $startTime->diffForHumans() }}</p>
                                     </div>
                                     <div class="col-md-4 text-end">
                                         <a href="{{ route('schedule.seats', ['schedule' => $schedule->id]) }}"
-                                           class="btn btn-primary">Book Seat</a>
+                                           class="btn btn-sm btn-primary">Book Seat</a> <!-- Reduced button size -->
                                     </div>
                                 </div>
                             </div>

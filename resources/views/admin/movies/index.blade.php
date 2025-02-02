@@ -28,6 +28,8 @@
                                         <th> {{ __('Poster') }} </th>
                                         <th> {{ __('Description') }}</th>
                                         <th> {{ __('Creation date') }}</th>
+                                        <th> {{ __('Genre') }}</th>
+                                        <th> {{ __('Min age') }}</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -40,9 +42,11 @@
                                                      style="max-width: 20px; max-height: 50px;">
                                             </td>
                                             <td><span
-                                                    title="{{$movie->description}}">{{ Str::limit($movie->description, 100) }}</span>
+                                                    title="{{$movie->description}}">{{ Str::limit($movie->description, 45) }}</span>
                                             </td>
                                             <td>{{ $movie->created_at }}</td>
+                                            <td>{{ $movie->genre?->name }}</td>
+                                            <td>{{ $movie->min_allowed_age }}</td>
                                             <td>
                                                 <a href="{{ route('admin.movies.edit', $movie->id) }}"
                                                    class="btn btn-primary btn-sm">

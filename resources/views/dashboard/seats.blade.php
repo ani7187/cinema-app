@@ -2,7 +2,22 @@
 
 @section('content')
     <div class="container mt-4">
-        <h1 class="text-center pb-5">Seats for Movie: {{ $schedule->movie->title }}</h1>
+        <h1 class="text-center pb-2">Seats for Movie: {{ $schedule->movie->title }}</h1>
+
+        <div class="row justify-content-center text-left pb-1">
+            <div class="col-8">
+                <h5><b>Age:</b> {{ $schedule->movie->min_allowed_age ? $schedule->movie->min_allowed_age . '+' : '' }}</h5>
+            </div>
+            <div class="col-8">
+                <h5><b>Genre:</b> {{ $schedule->movie->genre?->name }}</h5>
+            </div>
+            <div class="col-md-8">
+                <h5><b>Description:</b>
+                    <span class="text-wrap" style="word-break: break-word;"> {{ $schedule->movie->description }} </span>
+                </h5>
+            </div>
+        </div>
+        <hr>
         <h3 class="text-center">Start Time: {{ \Carbon\Carbon::parse($schedule->start_time)->format('M d, Y h:i A') }}</h3>
 
         <div class="d-flex justify-content-center mb-4">

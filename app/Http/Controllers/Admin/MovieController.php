@@ -58,7 +58,8 @@ class MovieController extends Controller
      */
     public function edit(Movie $movie): \Illuminate\Foundation\Application|View|Factory|App
     {
-        return view('admin.movies.edit', compact('movie'));
+        $genres = Genre::all();
+        return view('admin.movies.edit', compact('movie', 'genres'));
     }
 
     /**

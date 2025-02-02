@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('movies', function (Blueprint $table) {
-            $table->integer('min_allowed_age')->nullable();
+            $table->integer('min_allowed_age');
             $table->unsignedBigInteger('genre_id')->nullable();
 
             $table->foreign('genre_id')->references('id')->on('genres')->onDelete('set null');

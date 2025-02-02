@@ -74,7 +74,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-primary"> {{ __('Create Room<') }} </button>
+                                    <button type="submit" class="btn btn-primary"> {{ __('Create Room') }} </button>
                                     <a href="{{ route('admin.rooms.index') }}" class="btn btn-secondary"> {{ __('Cancel') }} </a>
                                 </div>
                             </form>

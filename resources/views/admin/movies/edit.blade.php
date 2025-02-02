@@ -56,6 +56,39 @@
                                 </div>
 
                                 <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="min_allowed_age">{{ __('Min Allowed Age') }} *</label>
+                                            <input type="number" class="form-control @error('min_allowed_age') is-invalid @enderror"
+                                                   id="min_allowed_age" name="min_allowed_age"
+                                                   placeholder="Enter min allowed age"
+                                                   value="{{ old('min_allowed_age', $movie->min_allowed_age) }}"> <!-- Pre-fill existing value -->
+                                            @error('min_allowed_age')
+                                            <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="genre_id">{{ __('Genre') }}</label>
+                                            <select class="select2 form-control @error('genre_id') is-invalid @enderror" id="genre_id" name="genre_id">
+                                                <option value="">{{ __('Select Genre') }}</option>
+                                                @foreach($genres as $genre)
+                                                    <option value="{{ $genre->id }}" {{ old('genre_id', $movie->genre_id) == $genre->id ? 'selected' : '' }}>
+                                                        {{ $genre->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('genre_id')
+                                            <div class="text-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label for="description">{{ __('Description') }}</label>

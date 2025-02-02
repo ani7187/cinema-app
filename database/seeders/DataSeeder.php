@@ -6,8 +6,7 @@ use App\Models\Movie;
 use App\Models\Room;
 use App\Models\RoomSeats;
 use App\Models\Schedule;
-use App\Models\Seat;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class DataSeeder extends Seeder
@@ -17,23 +16,35 @@ class DataSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create rooms
-        Room::create(['name' => 'Red Room', 'rows' => 10, 'seats_per_row' => 8]);
-        Room::create(['name' => 'Blue Room', 'rows' => 8, 'seats_per_row' => 10]);
+        $rooms = Room::factory(2)->create();
 
-        // Create movies
-        $movie1 = Movie::create(['title' => 'Movie 1', 'poster_url' => 'movie1.jpg']);
-        $movie2 = Movie::create(['title' => 'Movie 2', 'poster_url' => 'movie2.jpg']);
+        $movie1 = Movie::factory()->create();
+        $movie2 = Movie::factory()->create();
 
-        // Create schedules for rooms and movies
-        Schedule::create(['room_id' => 1, 'movie_id' => $movie1->id, 'start_time' => '2025-01-31 12:00:00', 'end_time' => '2025-01-31 12:00:00']);
-        Schedule::create(['room_id' => 1, 'movie_id' => $movie2->id, 'start_time' => '2025-01-31 14:00:00', 'end_time' => '2025-01-31 12:00:00']);
+        Schedule::factory()->create([
+            'room_id' => 1,
+            'movie_id' => $movie1->id,
+            'start_time' => Carbon::now()->addDays(2)->format('Y-m-d H:i:s'),
+            'end_time' => Carbon::now()->addDays(2)->addHours(2)->format('Y-m-d H:i:s'),
+            'published' => true,
+        ]);
 
-        // Create seats for rooms (example)
-        foreach (Room::all() as $room) {
+        Schedule::factory()->create([
+            'room_id' => 2,
+            'movie_id' => $movie2->id,
+            'start_time' => Carbon::now()->addDays(2)->addHours(4)->format('Y-m-d H:i:s'),
+            'end_time' => Carbon::now()->addDays(2)->addHours(6)->format('Y-m-d H:i:s'),
+            'published' => true,
+        ]);
+
+        foreach ($rooms as $room) {
             for ($row = 1; $row <= $room->rows; $row++) {
                 for ($seat = 1; $seat <= $room->seats_per_row; $seat++) {
-                    RoomSeats::create(['room_id' => $room->id, 'row' => $row, 'seat' => $seat]);
+                    RoomSeats::factory()->create([
+                        'room_id' => $room->id,
+                        'row' => $row,
+                        'seat' => $seat
+                    ]);
                 }
             }
         }

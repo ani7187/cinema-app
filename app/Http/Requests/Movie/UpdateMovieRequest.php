@@ -25,7 +25,7 @@ class UpdateMovieRequest extends FormRequest
             'title' => 'required|string|max:255|unique:movies,title,' . $this->route('movie')->id,
             'poster_url' => 'image|mimes:jpeg,png,jpg,gif,svg,webp',
             'description' => 'nullable|string',
-            'min_allowed_age' => 'nullable|integer|min:0',
+            'min_allowed_age' => 'required|integer|min:0',
             'genre_id' => 'nullable|exists:genres,id',
         ];
     }
