@@ -93,8 +93,6 @@
             var btn = $(this);
             var triggerBtn = $('#seatModal').data('trigger-btn'); // The button that triggered the modal
 
-            btn.attr('disabled', true);
-
             debugger
             triggerBtn.attr('disabled', true)
                 .removeClass('btn-success')
@@ -119,14 +117,10 @@
                         $('#seatModal').modal('hide');
                     } else {
                         alert(response.message);
-                        triggerBtn.attr('disabled', false)
-                            .attr('data-bs-target', '#seatModal');
                     }
                 },
                 error: function () {
                     alert('An error occurred while booking the seat. Please try again.');
-                    triggerBtn.attr('disabled', false)
-                        .attr('data-bs-target', '#seatModal');
                 },
             });
         });
